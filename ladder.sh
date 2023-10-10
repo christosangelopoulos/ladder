@@ -207,7 +207,7 @@ function play_menu () {
 			"") clear;enter_word;
 			;;
 			"W") clear; echo -e "     ${Y}╭───╮╭───╮╭───╮╭───╮  ╭───╮╭───╮╭───╮╭───╮\n     │ W ││ O ││ R ││ D │  │ L ││ I ││ S ││ T │\n     ╰───╯╰───╯╰───╯╰───╯  ╰───╯╰───╯╰───╯╰───╯ ${n}\n\n"
-			grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^.....$|column -x -c 80;
+			grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v '[^[:lower:]]'|grep -E ^....$|column -x -c 80;
 			echo -e "${Y}${bold}Press any key to return${n}";read -sN 1 v;clear;
 			;;
 		*)clear;
@@ -246,7 +246,7 @@ do
 		3) clear;show_statistics;echo -e "\nPress any key to return";read -sN 1 v;clear;
 		;;
 		4) clear;notify-send -t 5000 -i $HOME/.cache/ladder/ladder.png "🅴🆇🅸🆃🅴🅳
-🅻🅰🅳🅳🅴🅡";
+🅻🅰🅳🅳🅴🆁";
 		;;
 		*)clear;echo -e "\n😕 ${Y}${bold}$db${n} is an invalid key, please try again.\n"			;
 	esac
