@@ -11,7 +11,7 @@ Your starting point is an **initial four-letter word**.
 Your goal is to **transform  this word, one letter at a time**, through other valid words,
 and end up with  the **target word.**
 
-The tricky part is that on each entry, you can change ONLY ONE LETTER.
+The tricky part is that on each entry, you can change **ONLY ONE LETTER**.
 
 
 
@@ -63,7 +63,7 @@ or
 
   If your distro doesn't include this installed, you can install the respective package (`wordlist`, `words`) using the respective command (`apt`, `pacman`).
 
-* **ADDITIONALLY**, if someone wishes to play the game using a different word list, they can do so, editing **LINE 17**of the `wordy.sh`
+* **ADDITIONALLY**, if someone wishes to play the game using a different word list, they can do so, editing **LINE 17**of the `ladder.sh`
 
 ```
 WORD_LIST="/usr/share/dict/words"
