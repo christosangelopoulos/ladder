@@ -45,7 +45,6 @@ function show_statistics () {
 function win_game ()
 {
 	clear
-	((TRY++))
 	echo "$TRY win">>$HOME/.cache/ladder/statistics.txt
 	F[TRY]="GGGG"
 	print_box
@@ -54,8 +53,6 @@ function win_game ()
 	echo -e "│${Y}${bold}${MESSAGE:0:50}${n}│";
 	echo "╰──────────────────────────────╯"
 	A=${PLACEHOLDER_STR^^}
-	#echo -e "${Y}${bold}Congratulations!"
-	#echo -e "${Y}${bold}You made it after ${R}$TRY ${Y}tries!${n}\n"
 	echo -e "\nPress any key to return"
 	read -sN 1 v;clear;
 	db2="Q"
@@ -95,7 +92,7 @@ function enter_word () {
 		elif [[ $CHANGES -gt 1 ]]
 		then  COMMENT="Change ONLY ONE LETTER"
 		else
-			COMMENT=" Last word: $WORD_STR"
+			COMMENT=" Try $TRY: $WORD_STR"
 			GUESS[$TRY]=$WORD_STR
 			check_guess "$WORD_STR"
 		#COMMENT=" Enter 4-letter word"
