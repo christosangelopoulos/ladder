@@ -1,8 +1,11 @@
 # Ladder
 
+---
+
+---
 **Ladder** is a word  puzzle, played in a terminal window.
 
-![4.png](screenshots/4.png)
+![4.png](screenshots/4.png){width=200}
 
 
 
@@ -17,21 +20,17 @@ The tricky part is that on each entry, you can change **ONLY ONE LETTER**.
 
 ---
 
-For instance, if the initial word is **EAST**, and the target word is **NEST**, then you should go like this:
+For instance, if the initial word is **JADE**, and the target word is **MAIL**, then you should go like this:
 
-![2.png](screenshots/2.png)
-
-![3.png](screenshots/3.png)
-
-![4.png](screenshots/4.png)
-
-![5.png](screenshots/5.png)
-
+![2.png](screenshots/2.png){width=150}
+![3.png](screenshots/3.png){width=150}
+![4.png](screenshots/4.png){width=150}
+![5.png](screenshots/5.png){width=150}
+![5a.png](screenshots/5a.png){width=150}
 ---
 
 
-
-![1.png](screenshots/1.png)
+![1.png](screenshots/1.png){width=200}
 
 
 
@@ -44,14 +43,14 @@ From the **Main Menu**, the user can either
 
 
 
-![7.png](screenshots/7.png)
+![7.png](screenshots/7.png){width=400}
 
 
 or
 
 - **See the statistics**
 
- ![6.png](screenshots/6.png)
+ ![6.png](screenshots/6.png){width=200}
 
 ---
 
@@ -102,35 +101,27 @@ WORD_LIST="/path/to/prefered/wordlist"
     sudo dnf install lolcat
     ```
 
-
+---
 ## Install
 
+Clone the repo, then change directory to `ladder`:
 ```
-git clone https://gitlab.com/christosangel/ladder.git
-
-cd ladder/
-
+git clone https://gitlab.com/christosangel/ladder.git && cd ladder/
 ```
 
 To run the script from any directory, it has to be made executable, and then copied to `$PATH`:
 
 ```
-
-chmod +x ladder.sh
-
-cp ladder.sh ~/.local/bin/
-
+chmod +x ladder.sh && cp ladder.sh ~/.local/bin/
 ```
 
 After that, the user must run this command in order to create the necessary directories and files:
 
 ```
-mkdir ~/.cache/ladder/
-
-cp statistics.txt ladder.png ~/.cache/ladder/
-
+mkdir ~/.cache/ladder/ && cp statistics.txt ladder.png ~/.cache/ladder/
 ```
 
+---
 ## Run
 
 Just run:
