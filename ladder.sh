@@ -242,8 +242,8 @@ do
   ;;
   3) clear;show_statistics;echo -e "\n${W}Press any key to return${n}";read -sN 1 v;clear;
   ;;
-  4) clear;notify-send -t 5000 -i $HOME/.cache/ladder/ladder.png "🅴🆇🅸🆃🅴🅳
-🅻🅰🅳🅳🅴🆁";
+  4) clear;notify-send -t 5000 -i $HOME/.cache/ladder/ladder.png "Exited
+Ladder";
   ;;
   *)clear;echo -e "\n😕 ${Y}${bold}$db${n} is an invalid key, please try again.\n"   ;
  esac
