@@ -39,12 +39,13 @@ From the **Main Menu**, the user can either
 
 - **Start a new game**
 
-- **Read the puzzple rules**
-
-
+- **Read the puzzle rules**
 
 ![7.png](screenshots/7.png){width=400}
 
+- **Edit their Preferences**
+
+![8.png](screenshots/8.png){width=400}
 
 or
 
@@ -62,16 +63,17 @@ or
 
   If your distro doesn't include this installed, you can install the respective package (`wordlist`, `words`) using the respective command (`apt`, `pacman`).
 
-* **ADDITIONALLY**, if someone wishes to play the game using a different word list, they can do so, editing **LINE 17**of the `ladder.sh`
+* **ADDITIONALLY**, if someone wishes to play the game using a different word list, they can do so, selecting the **EDIT Preferences Option**, or editing the `$HOME/.config/ladder/ladder.config` file.
+
+change from:
 
 ```
-WORD_LIST="/usr/share/dict/words"
+WORD_LIST /usr/share/dict/words"
+```
+to:
 
 ```
-change to
-```
-WORD_LIST="/path/to/prefered/wordlist"
-
+WORD_LIST /path/to/preferred/wordlist
 ```
 
 
@@ -104,22 +106,30 @@ WORD_LIST="/path/to/prefered/wordlist"
 ---
 ## Install
 
-Clone the repo, then change directory to `ladder`:
+Clone the repo, then change directory to `ladder/`:
 ```
 git clone https://gitlab.com/christosangel/ladder.git && cd ladder/
 ```
 
-To run the script from any directory, it has to be made executable, and then copied to `$PATH`:
+Make  `install.sh` executable, and run it:
 
 ```
-chmod +x ladder.sh && cp ladder.sh ~/.local/bin/
+chmod +x install.sh && ./install.sh
 ```
 
-After that, the user must run this command in order to create the necessary directories and files:
+You are ready to go.
 
-```
-mkdir ~/.cache/ladder/ && cp statistics.txt ladder.png ~/.cache/ladder/
-```
+---
+## Configuring
+
+As mentioned above, the user by selecting  the **EDIT Preferences Option**, or editing the `$HOME/.config/ladder/ladder.config` file, can configure some variables according to their preferences:
+
+|n|Variable|Explanation|Acceptable Values| Default Value|
+|---|---|---|---|---|
+|1|STATS_COLOR|Show Statistics in color using `lolcat`| yes / no| yes|
+|2|WORD_LIST|The prefered dictionary that contains the words used in the game|Any adequate `txt` file| `/usr/share/dict/words`|
+|3|PREF_PNG |Preferred png from `$HOME/.config/ladder/png/` to show in the exit notification|Any valid absolute path to a `png`| `$HOME/.config/ladder/png/l1.png`|
+|4|PREF_EDITOR|The preferred text editor to edit the config file with|vim, nano, xed, gedit, kate or any gui/ tui text editor| nano|
 
 ---
 ## Run

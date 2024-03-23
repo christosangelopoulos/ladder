@@ -3,20 +3,22 @@
 # │ L ││ A ││ D ││ D ││ E ││ R │
 # ╰───╯╰───╯╰───╯╰───╯╰───╯╰───╯
 #A bash script written by Christos Angelopoulos, October 2023, under GPL v2
-Y="\033[1;33m"
-G="\033[1;32m"
-C="\033[1;36m"
-M="\033[1;35m"
-R="\033[1;31m"
-B="\033[1;34m"
-W="\x1b[38;5;242m" #Grid Color
-bold=`tput bold`
-n=`tput sgr0`
-#LINE 17 contains the address of the word list. .
-#Each user is free to modify this line in order to play the game using the word list of their liking.
-WORD_LIST="/usr/share/dict/words"
-TOTAL_SOLUTIONS="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v 'xx'|grep -v 'vii'|grep -v '[^[:lower:]]'|grep -E ^....$)"
-
+function load_config(){
+ Y="\033[1;33m"
+ G="\033[1;32m"
+ C="\033[1;36m"
+ M="\033[1;35m"
+ R="\033[1;31m"
+ B="\033[1;34m"
+ W="\x1b[38;5;242m" #Grid Color
+ bold=`tput bold`
+ n=`tput sgr0`
+ STATS_COLOR="$(grep "STATS_COLOR" $HOME/.config/ladder/ladder.config|awk '{print $2}')"
+ WORD_LIST="$(grep "WORD_LIST" $HOME/.config/ladder/ladder.config|awk '{print $2}')"
+ PREF_PNG="$(grep "PREF_PNG" $HOME/.config/ladder/ladder.config|awk '{print $2}')"
+ PREF_EDITOR="$(grep "PREF_EDITOR" $HOME/.config/ladder/ladder.config|awk '{print $2}')"
+ TOTAL_SOLUTIONS="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v 'xx'|grep -v 'vii'|grep -v '[^[:lower:]]'|grep -E ^....$)"
+}
 
 function quit_puzzle ()
 {
@@ -39,7 +41,12 @@ function show_statistics () {
  else
   CURRENT_ROW="$(awk '{print $2}' $HOME/.cache/ladder/statistics.txt|uniq -c|grep 'win'|tail -1|awk '{print $1}')"
  fi
+ if [[ $STATS_COLOR == 'yes' ]]
+ then
  echo -e " Games Played   : $PLAYED\n Games Won      : $WON\n Games Lost     : $(($PLAYED-$WON))\n Success ratio  : $SUC_RATIO%\n Record Guesses : $RECORD\n Record streak  : $MAX_ROW wins\n Current streak : $CURRENT_ROW wins"|lolcat -p 3000 -a -s 40 -F 0.3 -S 18
+ else
+ echo -e " Games Played   : $PLAYED\n Games Won      : $WON\n Games Lost     : $(($PLAYED-$WON))\n Success ratio  : $SUC_RATIO%\n Record Guesses : $RECORD\n Record streak  : $MAX_ROW wins\n Current streak : $CURRENT_ROW wins"
+ fi
 }
 
 function win_game ()
@@ -225,14 +232,15 @@ delete=$(cat << eof
 0000002
 eof
 )
+load_config
 db=""
 main_menu_reset
 db2=""
-while [ "$db" != "4" ]
+while [ "$db" != "5" ]
 do
  echo -e "${W}╭───────────────────────────────────╮"
  echo -e "${W}│  ${G}╭───╮╭───╮╭───╮╭───╮╭───╮╭───╮   ${W}│\n│  ${G}│ L ││ A ││ D ││ D ││ E ││ R │   ${W}│\n│  ${G}╰───╯╰───╯╰───╯╰───╯╰───╯╰───╯   ${W}│\n├───────────────────────────────────┤\n│   ${C}${bold}Transform one word to another ${W}  │"
- echo -en "├───────────────────────────────────┤\n│${n}Enter:                            ${W} │\n│ ${Y}${bold}1${n} to ${G}${bold}Play New Game.  ${W}             │\n│ ${Y}${bold}2${n} to ${C}${bold}Read the Rules.  ${W}            │\n│ ${Y}${bold}3"${n}" to ${C}${bold}Show Statistics.  ${W}           │\n│ ${Y}${bold}4${n} to ${R}${bold}Exit. ${W}                       │\n"
+ echo -en "├───────────────────────────────────┤\n│${n}Enter:                            ${W} │\n│ ${Y}${bold}1${n} to ${G}${bold}Play New Game.  ${W}             │\n│ ${Y}${bold}2${n} to ${C}${bold}Read the Rules.  ${W}            │\n│ ${Y}${bold}3"${n}" to ${C}${bold}Edit Preferences.  ${W}          │\n│ ${Y}${bold}4"${n}" to ${C}${bold}Show Statistics.  ${W}           │\n│ ${Y}${bold}5${n} to ${R}${bold}Exit. ${W}                       │\n"
  echo  -e "╰───────────────────────────────────╯\n${n}"
  read -sN 1  db
  case $db in
@@ -240,9 +248,11 @@ do
   ;;
   2) clear;rules;
   ;;
-  3) clear;show_statistics;echo -e "\n${W}Press any key to return${n}";read -sN 1 v;clear;
+  3) clear;eval "$PREF_EDITOR" $HOME/.config/ladder/ladder.config; load_config;clear
   ;;
-  4) clear;notify-send -t 5000 -i $HOME/.cache/ladder/ladder.png "Exited
+  4) clear;show_statistics;echo -e "\n${W}Press any key to return${n}";read -sN 1 v;clear;
+  ;;
+  5) clear;notify-send -t 5000 -i $PREF_PNG "Exited
 Ladder";
   ;;
   *)clear;echo -e "\n😕 ${Y}${bold}$db${n} is an invalid key, please try again.\n"   ;
