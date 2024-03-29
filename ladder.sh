@@ -29,8 +29,8 @@ CONFIG_FILE=$HOME/.config/ladder/ladder.config
  [[ -z $WORD_LIST ]]&&WORD_LIST="/usr/share/dict/words"&&config_fail=1
  [[ -z $PREFERRED_EDITOR ]]&&PREFERRED_EDITOR=nano &&config_fail=1
  [[ -z $PREFERRED_PNG ]]&&PREFERRED_PNG=$HOME/.local/share/ladder/png/l1.png &&config_fail=1
- [[ $config_fail == 1 ]]&&notify-send -t 9000 -i $HOME/.local/share/wordy/wordy.png "Configuration file was not loaded properly.
-Wordy is running with default configuration.";
+ [[ $config_fail == 1 ]]&&notify-send -t 9000 -i $HOME/.local/share/ladder/l1.png "Configuration file was not loaded properly.
+Ladder is running with default configuration.";
  TOTAL_SOLUTIONS="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v 'xx'|grep -v 'vii'|grep -v '[^[:lower:]]'|grep -E ^....$)"
 }
 
