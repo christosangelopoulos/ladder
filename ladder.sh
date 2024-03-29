@@ -3,20 +3,34 @@
 # │ L ││ A ││ D ││ D ││ E ││ R │
 # ╰───╯╰───╯╰───╯╰───╯╰───╯╰───╯
 #A bash script written by Christos Angelopoulos, October 2023, under GPL v2
+function load_colors()
+{
+ if [[ $STATS_COLOR == 'yes' ]]
+ then
+  R="\e[31m"
+  G="\e[32m"
+  Y="\e[33m"
+  B="\e[34m"
+  M="\e[35m"
+  C="\e[36m"
+  L="\e[37m"
+  W="\e[38;5;242m" #Grid Color
+ else
+  R="";G=;Y="";B="";M="";C="";L="";W=""
+ fi
+ bold="\e[1m"
+ n="\e[m"
+}
 function load_config(){
- Y="\033[1;33m"
- G="\033[1;32m"
- C="\033[1;36m"
- M="\033[1;35m"
- R="\033[1;31m"
- B="\033[1;34m"
- W="\x1b[38;5;242m" #Grid Color
- bold=`tput bold`
- n=`tput sgr0`
- STATS_COLOR="$(grep "STATS_COLOR" $HOME/.config/ladder/ladder.config|awk '{print $2}')"
- WORD_LIST="$(grep "WORD_LIST" $HOME/.config/ladder/ladder.config|awk '{print $2}')"
- PREF_PNG="$(grep "PREF_PNG" $HOME/.config/ladder/ladder.config|awk '{print $2}')"
- PREF_EDITOR="$(grep "PREF_EDITOR" $HOME/.config/ladder/ladder.config|awk '{print $2}')"
+CONFIG_FILE=$HOME/.config/ladder/ladder.config
+ config_fail=0
+ [[ -z "$CONFIG_FILE" ]]&&config_fail=1||source "$CONFIG_FILE"
+ [[ -z $STATS_COLOR ]]&&STATS_COLOR="yes"&&config_fail=1
+ [[ -z $WORD_LIST ]]&&WORD_LIST="/usr/share/dict/words"&&config_fail=1
+ [[ -z $PREFERRED_EDITOR ]]&&PREFERRED_EDITOR=nano &&config_fail=1
+ [[ -z $PREFERRED_PNG ]]&&PREFERRED_PNG=$HOME/.local/share/ladder/png/l1.png &&config_fail=1
+ [[ $config_fail == 1 ]]&&notify-send -t 9000 -i $HOME/.local/share/wordy/wordy.png "Configuration file was not loaded properly.
+Wordy is running with default configuration.";
  TOTAL_SOLUTIONS="$(grep -v "'" "$WORD_LIST"|grep -v -E [ê,è,é,ë,â,à,ô,ó,ò,ú,ù,û,ü,î,ì,ï,í,ç,ö,á,ñ]|grep -v 'xx'|grep -v 'vii'|grep -v '[^[:lower:]]'|grep -E ^....$)"
 }
 
@@ -41,12 +55,16 @@ function show_statistics () {
  else
   CURRENT_ROW="$(awk '{print $2}' $HOME/.cache/ladder/statistics.txt|uniq -c|grep 'win'|tail -1|awk '{print $1}')"
  fi
- if [[ $STATS_COLOR == 'yes' ]]
- then
- echo -e " Games Played   : $PLAYED\n Games Won      : $WON\n Games Lost     : $(($PLAYED-$WON))\n Success ratio  : $SUC_RATIO%\n Record Guesses : $RECORD\n Record streak  : $MAX_ROW wins\n Current streak : $CURRENT_ROW wins"|lolcat -p 3000 -a -s 40 -F 0.3 -S 18
- else
- echo -e " Games Played   : $PLAYED\n Games Won      : $WON\n Games Lost     : $(($PLAYED-$WON))\n Success ratio  : $SUC_RATIO%\n Record Guesses : $RECORD\n Record streak  : $MAX_ROW wins\n Current streak : $CURRENT_ROW wins"
- fi
+
+ echo -e "${C} Games Played   : $PLAYED";sleep 0.3
+ echo -e "${M} Games Won      : $WON";sleep 0.3
+ echo -e "${G} Games Lost     : $(($PLAYED-$WON))";sleep 0.3
+ echo -e "${Y} Success ratio  : $SUC_RATIO%";sleep 0.3
+ echo -e "${R} Record Guesses : $RECORD";sleep 0.3
+ echo -e "${B} Record streak  : $MAX_ROW wins";sleep 0.3
+ echo -e "${L} Current streak : $CURRENT_ROW wins";sleep 0.3
+
+
 }
 
 function win_game ()
@@ -219,6 +237,34 @@ function play_menu () {
  done
  db2=""
 }
+function main_menu ()
+{
+ while [ "$db" != "5" ]
+ do
+  echo -e "${W}╭───────────────────────────────────╮"
+  echo -e "${W}│  ${G}╭───╮╭───╮╭───╮╭───╮╭───╮╭───╮   ${W}│\n│  ${G}│ L ││ A ││ D ││ D ││ E ││ R │   ${W}│\n│  ${G}╰───╯╰───╯╰───╯╰───╯╰───╯╰───╯   ${W}│\n├───────────────────────────────────┤\n│   ${C}${bold}Transform one word to another ${W}  │"
+  echo -en "├───────────────────────────────────┤\n│${n}Enter:                            ${W} │\n│ ${Y}${bold}1${n} to ${G}${bold}Play New Game.  ${W}             │\n│ ${Y}${bold}2${n} to ${C}${bold}Read the Rules.  ${W}            │\n│ ${Y}${bold}3"${n}" to ${C}${bold}Edit Preferences.  ${W}          │\n│ ${Y}${bold}4"${n}" to ${C}${bold}Show Statistics.  ${W}           │\n│ ${Y}${bold}5${n} to ${R}${bold}Exit. ${W}                       │\n"
+  echo  -e "╰───────────────────────────────────╯\n${n}"
+  read -sN 1  db
+  case $db in
+   1)clear;new_game;play_menu;clear;
+   ;;
+   2) clear;rules;
+   ;;
+   3) clear;eval "$PREFERRED_EDITOR" "$CONFIG_FILE"; load_config;load_colors;tput civis;clear
+   ;;
+   4) clear;show_statistics;echo -e "\n${W}Press any key to return${n}";read -sN 1 v;tput civis;clear;
+   ;;
+   5) clear;notify-send -t 5000 -i $PREFERRED_PNG "Exited Ladder";
+   ;;
+   *)clear;echo -e "\n😕 ${Y}${bold}$db${n} is an invalid key, please try again.\n"   ;
+  esac
+ done
+}
+function cursor_reappear() {
+tput cnorm
+exit
+}
 #===============================================================================
 clear
 #detect BACKSPACE, solution found https://stackoverflow.com/questions/4196161/bash-read-backspace-button-behavior-problem
@@ -232,29 +278,11 @@ delete=$(cat << eof
 0000002
 eof
 )
+trap cursor_reappear HUP INT QUIT TERM EXIT ABRT
+tput civis # make cursor invisible
 load_config
+load_colors
 db=""
 main_menu_reset
 db2=""
-while [ "$db" != "5" ]
-do
- echo -e "${W}╭───────────────────────────────────╮"
- echo -e "${W}│  ${G}╭───╮╭───╮╭───╮╭───╮╭───╮╭───╮   ${W}│\n│  ${G}│ L ││ A ││ D ││ D ││ E ││ R │   ${W}│\n│  ${G}╰───╯╰───╯╰───╯╰───╯╰───╯╰───╯   ${W}│\n├───────────────────────────────────┤\n│   ${C}${bold}Transform one word to another ${W}  │"
- echo -en "├───────────────────────────────────┤\n│${n}Enter:                            ${W} │\n│ ${Y}${bold}1${n} to ${G}${bold}Play New Game.  ${W}             │\n│ ${Y}${bold}2${n} to ${C}${bold}Read the Rules.  ${W}            │\n│ ${Y}${bold}3"${n}" to ${C}${bold}Edit Preferences.  ${W}          │\n│ ${Y}${bold}4"${n}" to ${C}${bold}Show Statistics.  ${W}           │\n│ ${Y}${bold}5${n} to ${R}${bold}Exit. ${W}                       │\n"
- echo  -e "╰───────────────────────────────────╯\n${n}"
- read -sN 1  db
- case $db in
-  1)clear;new_game;play_menu;clear;
-  ;;
-  2) clear;rules;
-  ;;
-  3) clear;eval "$PREF_EDITOR" $HOME/.config/ladder/ladder.config; load_config;clear
-  ;;
-  4) clear;show_statistics;echo -e "\n${W}Press any key to return${n}";read -sN 1 v;clear;
-  ;;
-  5) clear;notify-send -t 5000 -i $PREF_PNG "Exited
-Ladder";
-  ;;
-  *)clear;echo -e "\n😕 ${Y}${bold}$db${n} is an invalid key, please try again.\n"   ;
- esac
-done
+main_menu

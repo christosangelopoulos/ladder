@@ -68,40 +68,14 @@ or
 change from:
 
 ```
-WORD_LIST /usr/share/dict/words"
+WORD_LIST=/usr/share/dict/words"
 ```
 to:
 
 ```
-WORD_LIST /path/to/preferred/wordlist
+WORD_LIST=/path/to/preferred/wordlist
 ```
 
-
-* Another, much less important dependency is [lolcat](https://github.com/busyloop/lolcat).
-
- `lolcat` helps show the *Statistics* in **color**, and therefore more fun.
-
-
-
- To install `lolcat`
-
-  * Debian based:
-
-    ```
-    sudo apt install lolcat
-    ```
-
- * Arch based:
-
-    ```
-    sudo pacman -S lolcat
-    ```
-
- * CentOS, RHEL, Fedora:
-
-    ```
-    sudo dnf install lolcat
-    ```
 
 ---
 ## Install
@@ -126,7 +100,7 @@ As mentioned above, the user by selecting  the **EDIT Preferences Option**, or e
 
 |n|Variable|Explanation|Acceptable Values| Default Value|
 |---|---|---|---|---|
-|1|STATS_COLOR|Show Statistics in color using `lolcat`| yes / no| yes|
+|1|STATS_COLOR|Show Statistics in color | yes / no| yes|
 |2|WORD_LIST|The prefered dictionary that contains the words used in the game|Any adequate `txt` file| `/usr/share/dict/words`|
 |3|PREF_PNG |Preferred png from `$HOME/.config/ladder/png/` to show in the exit notification|Any valid absolute path to a `png`| `$HOME/.config/ladder/png/l1.png`|
 |4|PREF_EDITOR|The preferred text editor to edit the config file with|vim, nano, xed, gedit, kate or any gui/ tui text editor| nano|
@@ -139,7 +113,13 @@ Just run:
 ```
 ladder.sh
 ```
-This TUI game was partly inspired by [weaver](https://weavergame.org/)
+or, from the `ladder/` directory:
+
+```
+./ladder.sh
+```
+
+This tui game was partly inspired by [weaver](https://weavergame.org/)
 
 If you like this project, there is a couple of other projects that might interest you:
 

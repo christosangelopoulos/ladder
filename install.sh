@@ -1,12 +1,11 @@
 #! /bin/bash
 #make sh executable, copy it to the $PATH
-chmod +x ladder.sh
-cp ladder.sh $HOME/.local/bin/
+chmod +x ladder.sh&&cp ladder.sh $HOME/.local/bin/
 # create the necessary directories and files:
-mkdir $HOME/.cache/ladder/ ~/.config/ladder/
-touch $HOME/.cache/ladder/statistics.txt
-cp -r png/ $HOME/.config/ladder/
-echo "STATS_COLOR yes
-WORD_LIST /usr/share/dict/words
-PREF_PNG $HOME/.config/ladder/png/l1.png
-PREF_EDITOR nano">$HOME/.config/ladder/ladder.config
+mkdir -p $HOME/.local/share/ladder $HOME/.config/ladder/
+cp -r png/ $HOME/.local/share/ladder/
+
+echo -e "STATS_COLOR=yes
+WORD_LIST=/usr/share/dict/words
+PREFERRED_PNG=$HOME/.local/share/ladder/png/l1.png
+PREFERRED_EDITOR=${EDITOR-nano}">$HOME/.config/ladder/ladder.config
