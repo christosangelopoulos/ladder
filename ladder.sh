@@ -37,23 +37,23 @@ Ladder is running with default configuration.";
 function quit_puzzle ()
 {
  echo -e "     ${G}╭───╮ ${R}╭───╮╭───╮╭───╮╭───╮     \n     ${G}│ U │ ${R}│ Q ││ U ││ I ││ T │     \n     ${G}╰───╯ ${R}╰───╯╰───╯╰───╯╰───╯ ${n}    \n\n"
- echo "$TRY lose">>$HOME/.cache/ladder/statistics.txt
+ echo "$TRY lose">>$HOME/.local/share/ladder/statistics.txt
  echo -e "\n${W}Press any key to return${n}"
  read -sN 1 v;clear;
 }
 
 function show_statistics () {
  echo -e "     ${Y}╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ S ││ T ││ A ││ T ││ S │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯ ${n}    \n\n"
- PLAYED="$(cat $HOME/.cache/ladder/statistics.txt|wc -l)"
- WON="$(grep 'win' $HOME/.cache/ladder/statistics.txt|wc -l)"
+ PLAYED="$(cat $HOME/.local/share/ladder/statistics.txt|wc -l)"
+ WON="$(grep 'win' $HOME/.local/share/ladder/statistics.txt|wc -l)"
  SUC_RATIO="$(echo "scale=2; $WON *100/ $PLAYED" | bc)"
- RECORD="$(grep 'win' $HOME/.cache/ladder/statistics.txt|sort -h |head -1|awk '{print $1}')"
- MAX_ROW="$(awk '{print $2}' $HOME/.cache/ladder/statistics.txt|uniq -c|grep 'win'|head -1|awk '{print $1}')"
- if [[ "$(tail -1 $HOME/.cache/ladder/statistics.txt)" == "lose" ]]
+ RECORD="$(grep 'win' $HOME/.local/share/ladder/statistics.txt|sort -h |head -1|awk '{print $1}')"
+ MAX_ROW="$(awk '{print $2}' $HOME/.local/share/ladder/statistics.txt|uniq -c|grep 'win'|head -1|awk '{print $1}')"
+ if [[ "$(tail -1 $HOME/.local/share/ladder/statistics.txt)" == "lose" ]]
  then
   CURRENT_ROW="0"
  else
-  CURRENT_ROW="$(awk '{print $2}' $HOME/.cache/ladder/statistics.txt|uniq -c|grep 'win'|tail -1|awk '{print $1}')"
+  CURRENT_ROW="$(awk '{print $2}' $HOME/.local/share/ladder/statistics.txt|uniq -c|grep 'win'|tail -1|awk '{print $1}')"
  fi
 
  echo -e "${C} Games Played   : $PLAYED";sleep 0.3
@@ -70,7 +70,7 @@ function show_statistics () {
 function win_game ()
 {
  clear
- echo "$TRY win">>$HOME/.cache/ladder/statistics.txt
+ echo "$TRY win">>$HOME/.local/share/ladder/statistics.txt
  F[TRY]="GGGG"
  print_box
  MESSAGE="  You made it after ${R}$TRY ${Y}tries              "
