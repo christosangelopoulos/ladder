@@ -44,26 +44,30 @@ function quit_puzzle ()
 
 function show_statistics () {
  echo -e "     ${Y}╭───╮╭───╮╭───╮╭───╮╭───╮     \n     │ S ││ T ││ A ││ T ││ S │     \n     ╰───╯╰───╯╰───╯╰───╯╰───╯ ${n}    \n\n"
- PLAYED="$(cat $HOME/.local/share/ladder/statistics.txt|wc -l)"
- WON="$(grep 'win' $HOME/.local/share/ladder/statistics.txt|wc -l)"
- SUC_RATIO="$(echo "scale=2; $WON *100/ $PLAYED" | bc)"
- RECORD="$(grep 'win' $HOME/.local/share/ladder/statistics.txt|sort -h |head -1|awk '{print $1}')"
- MAX_ROW="$(awk '{print $2}' $HOME/.local/share/ladder/statistics.txt|uniq -c|grep 'win'|head -1|awk '{print $1}')"
- if [[ "$(tail -1 $HOME/.local/share/ladder/statistics.txt)" == "lose" ]]
+ if [[ -f $HOME/.local/share/ladder/statistics.txt ]]&&[[ -n $(cat $HOME/.local/share/ladder/statistics.txt) ]]
  then
-  CURRENT_ROW="0"
+  PLAYED="$(cat $HOME/.local/share/ladder/statistics.txt|wc -l)"
+  WON="$(grep 'win' $HOME/.local/share/ladder/statistics.txt|wc -l)"
+  SUC_RATIO="$(echo "scale=2; $WON *100/ $PLAYED" | bc)"
+  RECORD="$(grep 'win' $HOME/.local/share/ladder/statistics.txt|sort -h |head -1|awk '{print $1}')"
+  MAX_ROW="$(awk '{print $2}' $HOME/.local/share/ladder/statistics.txt|uniq -c|grep 'win'|head -1|awk '{print $1}')"
+  if [[ "$(tail -1 $HOME/.local/share/ladder/statistics.txt)" == "lose" ]]
+  then
+   CURRENT_ROW="0"
+  else
+   CURRENT_ROW="$(awk '{print $2}' $HOME/.local/share/ladder/statistics.txt|uniq -c|grep 'win'|tail -1|awk '{print $1}')"
+  fi
+
+  echo -e "${C} Games Played   : $PLAYED";sleep 0.3
+  echo -e "${M} Games Won      : $WON";sleep 0.3
+  echo -e "${G} Games Lost     : $(($PLAYED-$WON))";sleep 0.3
+  echo -e "${Y} Success ratio  : $SUC_RATIO%";sleep 0.3
+  echo -e "${R} Record Guesses : $RECORD";sleep 0.3
+  echo -e "${B} Record streak  : $MAX_ROW wins";sleep 0.3
+  echo -e "${L} Current streak : $CURRENT_ROW wins";sleep 0.3
  else
-  CURRENT_ROW="$(awk '{print $2}' $HOME/.local/share/ladder/statistics.txt|uniq -c|grep 'win'|tail -1|awk '{print $1}')"
+  echo -e "${W}No statistics available at the moment."
  fi
-
- echo -e "${C} Games Played   : $PLAYED";sleep 0.3
- echo -e "${M} Games Won      : $WON";sleep 0.3
- echo -e "${G} Games Lost     : $(($PLAYED-$WON))";sleep 0.3
- echo -e "${Y} Success ratio  : $SUC_RATIO%";sleep 0.3
- echo -e "${R} Record Guesses : $RECORD";sleep 0.3
- echo -e "${B} Record streak  : $MAX_ROW wins";sleep 0.3
- echo -e "${L} Current streak : $CURRENT_ROW wins";sleep 0.3
-
 
 }
 
