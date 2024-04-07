@@ -79,7 +79,7 @@ function win_game ()
  print_box
  MESSAGE="  You made it after ${R}$TRY ${Y}tries              "
  echo -e "${W}│${Y}       Congratulations!      ${W} │"
- echo -e "${W}│${Y}${bold}${MESSAGE:0:50}${W}│";
+ echo -e "${W}│${Y}${bold}${MESSAGE:0:42}${W}│";
  echo -e "${W}╰──────────────────────────────╯"
  A=${PLACEHOLDER_STR^^}
  echo -e "\nPress any key to return${n}"
